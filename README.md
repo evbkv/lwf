@@ -49,6 +49,10 @@ Change _$THEME_ on your css file name without _.css_ and path (look next step).
 * Error page (error class in _lfw/err.php_).
 * Some other content blocks...
 
+## Screenshot
+
+![Screenshot](screenshot.png)
+
 ## Author
 
 [Evgenii Bykov](https://github.com/evgeniibykov)
