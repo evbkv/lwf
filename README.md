@@ -38,6 +38,8 @@ Important, this framework is written to use multiple languages, so if you have t
 
 Change _$THEME_ on your css file name without _.css_ and path (look next step).
 
+Change the emails in the form of a sent message in _$to_ and _$headers_ variables on lines 282-287 in _lwf/landing.php_.
+
 ### CSS
 
 6. Copy and rename _css/general.css_.
