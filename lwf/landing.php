@@ -279,12 +279,12 @@ class view {
 		if (isset($_POST['name']) && isset($_POST['email']) && $_POST['lastname']=='') {
 			echo '<p>'.$_POST['name'].', '.date::$FORM_SENDED[$lang].'!</p>';
 
-			$to  = "<info@3drender.pro>";
+			$to  = "<your@email.com>";
 			$subject = "Message from 3drender.pro";
 			$message = '<p>Name: '.$_POST['name'].'</p><p>E-mail: '.$_POST['email'].'</p><p>Message: '.$_POST['text'].'</p>';
-			$headers  = "Content-type: text/html; charset=windows-1251 \r\n";
-			$headers .= "From: <info@3drender.pro>\r\n";
-			$headers .= "Reply-To: info@3drender.pro\r\n";
+			$headers  = "Content-type: text/html; charset=utf-8 \r\n";
+			$headers .= "From: <mail@lwf.com>\r\n";
+			$headers .= "Reply-To: mail@lwf.com\r\n";
 			mail($to, $subject, $message, $headers);
 
 		} else {
