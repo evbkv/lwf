@@ -57,7 +57,7 @@ Change the emails in the form of a sent message in _$to_ and _$headers_ variable
 
 ## Author
 
-[Evgenii Bykov](https://github.com/evgeniibykov)
+[Evgenii Bykov](https://github.com/evbkv)
 
 ## License
 
