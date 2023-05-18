@@ -4,7 +4,7 @@
 
 I needed a framework for my own project that would support multiple languages and have different content blocks — texts, images, 360 deg, banners and other. This framework was maked for my goals, it have MVC structure and writen on php.
 
-For example, my landing page project: [3drender.pro](https://3drender.pro).
+For example, my landing page project: [evbkv.ru](https://evbkv.ru).
 
 ## Installation
 
