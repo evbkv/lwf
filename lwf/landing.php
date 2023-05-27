@@ -244,6 +244,27 @@ class view {
 		}
 	}
 
+	// Block - User Code
+
+	public static function userCode($section, $lang) {
+		if (array_key_exists($section, date::$USER_CODE) == true) {
+			include_once date::$USER_CODE[$section][$lang];
+		}
+	}
+
+
+	// Block - Brands
+
+	public static function brands($section) {
+		if (array_key_exists($section, date::$BRANDS) == true) {
+			echo '<div class="brands">';
+			foreach (date::$BRANDS[$section] as $brand) {
+				echo '<a href="'.$brand[1].'" target="_blank"><img src="img/'.$brand[0].'" alt=""></a>';
+			}
+			echo '</div>';
+		}
+	}
+
 
 	// Footer
 
