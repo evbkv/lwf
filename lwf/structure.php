@@ -20,8 +20,9 @@ foreach ($arr as $section) {
 	view::imgBlock4($section, $lang);
 	view::imgBlock6($section, $lang);
 	view::secondText($section, $lang);
-	view::benefits($section, $lang);
 	view::deg360($section);
+	view::brands($section);
+	view::benefits($section, $lang);
 	view::userCode($section, $lang);
 	view::closeSection();
 	view::now($section, $lang);
