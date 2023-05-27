@@ -387,4 +387,9 @@ class date {
 		]
 	];
 
+	// User code
+
+	public static $USER_CODE = [
+	];
+
 }
