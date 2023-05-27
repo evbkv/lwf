@@ -377,6 +377,10 @@ class date {
 		]
 	];
 
+	// Brands
+
+	public static $BRANDS = [
+	];
 
 	// Now
 
