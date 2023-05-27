@@ -22,6 +22,7 @@ foreach ($arr as $section) {
 	view::secondText($section, $lang);
 	view::benefits($section, $lang);
 	view::deg360($section);
+	view::userCode($section, $lang);
 	view::closeSection();
 	view::now($section, $lang);
 }
