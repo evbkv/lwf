@@ -1,55 +1,75 @@
-# The Landing Web Framework
+# The Landing Web Framework v2
 
 ## Description
 
-I needed a framework for my own project that would support multiple languages and have different content blocks — texts, images, 360 deg, banners and other. This framework was maked for my goals, it have MVC structure and writen on php.
+A flexible PHP framework for creating multi-language landing pages with various content blocks including texts, images, 360° views, banners, FAQ sections, and more. Built with MVC architecture and enhanced with SEO optimization features.
 
-For example, my landing page project: [evbkv.ru](https://evbkv.ru).
+**Version 2** (October 2025) includes significant improvements for better SEO, additional content blocks, and extended functionality.
 
 ## Installation
 
-Get this repository and save it on your local or web host.
+1. Clone or download this repository to your local or web server
+2. The framework will work immediately with default content
 
-So, it will working with default content.
+## Configuration
 
-## Configure
+### Basic Setup
 
-### Images
+1. **Images**: Add your images to the `_img` folder
+   - Replace default images in `_img/lwf` folder:
+     - `logo.svg`
+     - `header-bg.jpg` 
+     - `footer-bg.jpg`
+   - Update `favicon.svg`
 
-1. Save your images in _img_ folder.
-2. Change this files _logo.png_, _header-bg.jpg_ and _footer-bg.jpg_ in _img/lwf_ folder.
-3. Change _favicon.ico_.
+2. **Files**: Add downloadable files for visitors in the `_file` folder
 
-### Files
+### Content Structure
 
-4. Save your files for guest download in _file_ folder.
+3. **Main Configuration**: Edit `date.php` to modify structure and content
+   - Update "General date, header and footer" section
+   - Configure "Sections" with names and quantity
+   - Add content blocks to appropriate sections:
+     - Text blocks (first, second)
+     - Image blocks (3, 4, or 6 images with text)
+     - Benefits section
+     - 360° views
+     - FAQ section
+     - Current status ("Now")
+     - Custom code blocks
 
-### Change structure and content
+4. **Multi-language Support**: 
+   - The framework supports multiple languages
+   - `index.php` detects user language from `$LANG` variable
+   - Provide content for all supported languages
 
-5. For changing structure and content you need to change _date.php_ file.
+5. **Theme**: 
+   - Update `$THEME` with your CSS filename (without `.css` extension)
+   - Copy and customize `css/general.css` for your design
 
-So, it will biggest work!
+6. **Contact Form**:
+   - Update email recipients in `$to` and `$headers` variables (lines 282-287 in `lwf/landing.php`)
 
-First, you need change _"General date, header and footer"_. Next correct _"Sections"_, where count of sections and it's names.
+### New v2 Features
 
-And after, change: _"First text"_, _"Second text"_, _"Image block with 3 pictures, text and button"_, _"Image block with 4 pictures and text"_, _"Image block with 6 pictures and text"_, _"Benefits"_, _"360 deg"_ and _"Now"_. These blocks can be into these sections. You need to write section name and your block content, this is block will be into the section now.
+7. **SEO Optimization**:
+   - Configure OpenGraph meta tags in appropriate sections
+   - Update `robots.txt` and `sitemap.xml` for your domain
 
-Important, this framework is written to use multiple languages, so if you have two languages, then you should always have two content, if three, then three content. _index.php_ defines the user's language, if it's specified in _$LANG_, then the user's language is selected, else the first language in _$LANG_ is selected.
+8. **Blog Integration**:
+   - Supports [MicroBlogger (MB)](https://github.com/evbkv/mb) framework for blogging functionality
+   - Configure blog settings in separate MB configuration
 
-Change _$THEME_ on your css file name without _.css_ and path (look next step).
-
-Change the emails in the form of a sent message in _$to_ and _$headers_ variables on lines 282-287 in _lwf/landing.php_.
-
-### CSS
-
-6. Copy and rename _css/general.css_.
-7. Correct your css file for your style!
+9. **Custom Code**:
+   - Add custom PHP/HTML code via `user-code.php` (e.g., calculators, interactive elements)
+   - Insert tracking scripts, chat widgets, or JSON-LD via `scripts.php`
 
 ## Roadmap
 
-* Admin page for create/change structure and content (admin class in _lfw/admin.php_).
-* Error page (error class in _lfw/err.php_).
-* Some other content blocks...
+* Admin panel for content management (admin class in `lwf/admin.php`)
+* Custom error pages (error class in `lwf/err.php`)
+* Additional content block types
+* Enhanced blog integration features
 
 ## Screenshot
 

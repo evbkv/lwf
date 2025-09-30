@@ -16,9 +16,9 @@ $arr = array_keys(date::$SECTIONS);
 foreach ($arr as $section) {
 	view::openSection($section);
 	view::firstText($section, $lang);
-	view::imgBlock3($section, $lang);
-	view::imgBlock4($section, $lang);
 	view::imgBlock6($section, $lang);
+	view::imgBlock4($section, $lang);
+	view::imgBlock3($section, $lang);
 	view::secondText($section, $lang);
 	view::deg360($section);
 	view::brands($section);
@@ -30,4 +30,8 @@ foreach ($arr as $section) {
 
 // Footer
 
+view::yandexReviews();
+view::faq($lang);
+view::mb();
+view::vkWidget();
 view::footer($lang);

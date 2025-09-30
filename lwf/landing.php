@@ -47,7 +47,7 @@ class view {
 						'.date::$LOCATION2[$lang].'
 					</div><div>
 						<span class="color1">'.date::$PHONE1[$lang].'</span><br>
-						'.date::$PHONE2[$lang].'
+						<a href="tel:+'.preg_replace('/\D/', '', date::$PHONE2[$lang]).'">'.date::$PHONE2[$lang].'</a>
 					</div><div>
 						<span class="color1">'.date::$EMAIL1[$lang].'</span><br>
 						<a href="mailto:'.date::$EMAIL2[$lang].'">'.date::$EMAIL2[$lang].'</a>
@@ -211,7 +211,6 @@ class view {
 	public static function deg360($section) {
 		if (array_key_exists($section, date::$DEG360) == true) {
 			echo '
-				<script src="js/jquery-3.3.1.min.js"></script>
 				<script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
 				<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
 
@@ -252,7 +251,6 @@ class view {
 		}
 	}
 
-
 	// Block - Brands
 
 	public static function brands($section) {
@@ -264,15 +262,96 @@ class view {
 			echo '</div>';
 		}
 	}
+	
+    // 	Block - Yandex Reviews
 
+	public static function yandexReviews() {
+        if (isset(date::$YANDEX_REVIEWS)) echo '
+        <style>
+            iframe[src*="yandex.ru/maps-reviews-widget"] {
+                transform: translateY(-110px);
+            }
+        </style>
+        <article class="wrapper">' . date::$YANDEX_REVIEWS . '</article>';
+	}
+	
+    // Block - FAQ
+	
+    public static function faq($lang) {
+        if (isset(date::$FAQ)) {
+            echo '<div class="wrapper"><div class="firstText"><h2>'.date::$FAQ[0][$lang].'</h2></div><div class="faqContainer">';
+            $faqEntities = []; // массив для JSON-LD
+            foreach (date::$FAQ[1] as $faqItem) {
+                echo '<div class="faqItem">';
+                    echo '<div class="faqQuestion">'.$faqItem[0][$lang].'</div>';
+                    echo '<div class="faqAnswer">'.$faqItem[1][$lang].'</div>';
+                echo '</div>';
+                $qText = strip_tags($faqItem[0][$lang]);
+                $aText = strip_tags($faqItem[1][$lang]);
+                $aText = str_replace(["\r\n", "\r", "\n", "\t"], " ", $aText);
+                $qText = str_replace(["\r\n", "\r", "\n", "\t"], " ", $qText);
+                $aText = preg_replace('/\s{2,}/u', ' ', $aText);
+                $qText = preg_replace('/\s{2,}/u', ' ', $qText);
+                $qText = trim($qText);
+                $aText = trim($aText);
+                $faqEntities[] = [
+                    "@type" => "Question",
+                    "name" => $qText,
+                    "acceptedAnswer" => [
+                        "@type" => "Answer",
+                        "text" => $aText
+                    ]
+                ];
+            }
+            echo '
+            </div>
+            <script>
+                const faqItems = document.querySelectorAll(".faqItem");
+                faqItems.forEach(item => {
+                    item.addEventListener("click", function() {
+                        this.classList.toggle("active");
+                    });
+                });
+            </script>';
+            $faqJson = [
+                "@context" => "https://schema.org",
+                "@type" => "FAQPage",
+                "mainEntity" => $faqEntities
+            ];
+            echo '<script type="application/ld+json">'.json_encode($faqJson, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES).'</script>';
+            echo '</div>';
+        }
+    }
 
+    // 	Block - MicroBlogger(MB)
+
+    public static function mb() {
+        if (isset(date::$MB)) {
+            echo '<div class="wrapper"><div class="firstText">';
+            $path = date::$MB . '/mb/lastposts.php';
+            $realPath = realpath($path);
+            if ($realPath) {
+                include_once $realPath;
+            } else {
+                echo "Not file: $path";
+            }
+            echo '</div></div>';
+        }
+    }
+    
+    // Block - VK Widget
+    
+	public static function vkWidget() {
+        if (isset(date::$VK_WIDGET)) echo '<article class="wrapper" style="padding-top: 70px; display: flex; justify-content: center; align-items: center;">' . date::$VK_WIDGET . '</article>';
+	}
+	
 	// Footer
 
 	public static function footer($lang) {
 		echo '
 		 	</main>
 		 	
-			<footer>
+			<footer itemscope itemtype="http://schema.org/Organization">
 				<a id="footer"></a>
 				<div class="footerInnerWrapper">
 					<h2>'.date::$OFFER[$lang].'</h2>
@@ -283,15 +362,15 @@ class view {
 							<h3>'.date::$CONTACT_US[$lang].'</h3>
 							<div>
 								'.date::$LOCATION1[$lang].'<br>
-								'.date::$LOCATION2[$lang].'
+								<span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress"><span itemprop="addressLocality">'.date::$LOCATION2[$lang].'</span></span>
 							</div>
 							<div>
 								'.date::$PHONE1[$lang].'<br>
-								'.date::$PHONE2[$lang].'
+								<span itemprop="telephone"><a href="tel:+'.preg_replace('/\D/', '', date::$PHONE2[$lang]).'">'.date::$PHONE2[$lang].'</a></span>
 							</div>
 							<div>
 								'.date::$EMAIL1[$lang].'<br>
-								<a href="mailto:'.date::$EMAIL2[$lang].'">'.date::$EMAIL2[$lang].'</a>
+								<a href="mailto:'.date::$EMAIL2[$lang].'"><span itemprop="email">'.date::$EMAIL2[$lang].'</span></a>
 							</div>
 							<a class="social_net" style="background-image: url(\'img/lwf/sn-ico/'.date::$SOCIAL_NETWORK[$lang].'-logo.png\')" href="'.date::$SOCIAL_NETWORK_LINK[$lang].'" target="_blank"></a>
 						</div>
@@ -300,12 +379,12 @@ class view {
 		if (isset($_POST['name']) && isset($_POST['email']) && $_POST['lastname']=='') {
 			echo '<p>'.$_POST['name'].', '.date::$FORM_SENDED[$lang].'!</p>';
 
-			$to  = "<your@email.com>";
-			$subject = "Message from 3drender.pro";
+			$to  = "<design@evbkv.ru>";
+			$subject = "Message from evbkv.ru/design";
 			$message = '<p>Name: '.$_POST['name'].'</p><p>E-mail: '.$_POST['email'].'</p><p>Message: '.$_POST['text'].'</p>';
 			$headers  = "Content-type: text/html; charset=utf-8 \r\n";
-			$headers .= "From: <mail@lwf.com>\r\n";
-			$headers .= "Reply-To: mail@lwf.com\r\n";
+			$headers .= "From: <mail@evbkv.ru>\r\n";
+			$headers .= "Reply-To: mail@evbkv.ru\r\n";
 			mail($to, $subject, $message, $headers);
 
 		} else {
@@ -327,7 +406,7 @@ class view {
 				</div>
 
 				<div class="copyright">
-					© '.date::$NAME[$lang].'
+					© <span itemprop="name">'.date::$NAME[$lang].'</span>
 				</div>
 
 			</footer>

@@ -29,6 +29,7 @@ class LWF {
 	// Error page
 
 	public static function err() {
+	    header("HTTP/1.0 404 Not Found");
 		include_once 'lwf/err.php';
 		html::header('error');
 		echo '<p>404 Error: page not found.</p>';

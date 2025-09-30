@@ -16,13 +16,18 @@ class date {
 		'en',
 		'ru'
 	];
+	public static $WEB = 'http://localhost/lwf/';
 	public static $NAME = [
 		'LWF',
 		'LWF'
 	];
 	public static $TITLE = [
-		'The Landing Web <br>Framework',
-		'Фреймворк <br>одностраничных веб-сайтов'
+		'The Landing Web Framework',
+		'Фреймворк одностраничных веб-сайтов'
+	];
+	public static $DESCRIPTION = [
+		'LWF (Landing Web Framework): Lightweight PHP framework for creating fast, SEO-optimized landing pages. Minimalist design, easy customization, and perfect for developers building high-conversion marketing pages.',
+		'LWF (Landing Web Framework) - легкий PHP-фреймворк для создания быстрых, оптимизированных для SEO целевых страниц. Минималистичный дизайн, простая настройка и идеальное решение для разработчиков, создающих маркетинговые страницы с высокой конверсией.'
 	];
 	public static $OFFER = [
 		'<span class="color2">50% DISCOUNT</span> DESCRIPTION <br><span class="light">OF THE SPECIAL OFFER</span>',
@@ -93,6 +98,13 @@ class date {
 		'ваше сообщение было отправлено'
 	];
 	public static $THEME = 'general';
+    public static $YANDEX_REVIEWS = <<<HTML
+
+HTML;
+	// public static $MB = '';
+	public static $VK_WIDGET = <<<HTML
+
+HTML;
 
 	// Sections
 
@@ -380,6 +392,13 @@ class date {
 	// Brands
 
 	public static $BRANDS = [
+		'section 4' => [
+			['lwf/logo.svg','https://github.com/evbkv/lwf'],
+			['lwf/logo.svg','https://github.com/evbkv/lwf'],
+			['lwf/logo.svg','https://github.com/evbkv/lwf'],
+			['lwf/logo.svg','https://github.com/evbkv/lwf'],
+			['lwf/logo.svg','https://github.com/evbkv/lwf'],
+		]
 	];
 
 	// Now
@@ -390,10 +409,45 @@ class date {
 			'СЕЙЧАС!'
 		]
 	];
+	
+    // FAQ	
 
+	public static $FAQ = [
+		['FAQ','Вопросы и ответы'],
+		[
+    		[
+    		    [
+    		        'Question 1','Вопрос 1'
+                ],
+    		    [
+    		        'Answer 1','Ответ 1'
+                ]
+    		],
+    		[
+    		    [
+    		        'Question 2','Вопрос 2'
+                ],
+    		    [
+    		        'Answer 2','Ответ 2'
+                ]
+    		],
+    		[
+    		    [
+    		        'Question 3','Вопрос 3'
+                ],
+    		    [
+    		        'Answer 3','Ответ 3'
+                ]
+    		],
+		]
+	];
+	
 	// User code
 
 	public static $USER_CODE = [
+		'section 4' => [
+			'user-code.php','user-code.php'
+		]
 	];
 
 }

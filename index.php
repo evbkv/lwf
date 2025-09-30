@@ -1,4 +1,21 @@
-<!DOCTYPE html><?php
+<?php
+$bad = ['_ym_debug','fbclid','gclid'];
+foreach ($bad as $p) {
+    if (!empty($_GET[$p])) {
+        $scheme = 'http';
+        if ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ||
+            (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')) {
+            $scheme = 'https';
+        }
+        $url = $scheme . '://' . $_SERVER['HTTP_HOST'] . parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        header("HTTP/1.1 301 Moved Permanently");
+        header("Location: $url");
+        exit;
+    }
+}
+?>
+
+<?php
 
 /**
  *

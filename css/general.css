@@ -7,8 +7,9 @@
 /* COLORS  */
 
 :root {
-	--color1: #009fff;
-	--color2: #ec2f4b;
+	--color1: #E74C3C;
+	--color2: #808080;
+	--color3: #818181;
 }
 
 /* Global tags */
@@ -44,16 +45,16 @@ p {
 	font-weight: 400;
 	font-size: 20px;
 	line-height: 30px;
-	color: #818181;
+	color: var(--color3);
 }
 
 /* Global classes */
 
 .color1 {
-	color: var(--color1);
+	color: var(--color2);
 }
 .color2 {
-	color: var(--color2);
+	color: var(--color1);
 }
 .light {
 	font-weight: 300;
@@ -141,10 +142,10 @@ p {
 }
 .logotype {
 	float: left;
-	width: 108px;
+	width: 219px;
 	height: 108px;
 	margin: 13px 0 0 0px;
-	background-image: url("../img/lwf/logo.png");
+	background-image: url("../img/lwf/logo.svg");
 	background-size: cover;
 	background-position: center;
 }
@@ -203,7 +204,7 @@ p {
 	font-weight: 300;
 	font-size: 20px;
 	line-height: 23px;
-	animation-duration: 15s;
+	animation-duration: 8s;
 	animation-name: header-other;
 }
 .headerContacts .wrapper div .social_net {
@@ -386,6 +387,34 @@ main {
 	z-index: 10000;
 	cursor: pointer;
 }
+.viewer::before,
+.viewer::after {
+  content: "";
+  position: absolute;
+  top: 20px;
+  right: 5px;
+  width: 30px;
+  height: 2px;
+  background-color: white;
+}
+.viewer::before {
+  transform: rotate(45deg);
+}
+.viewer::after {
+  transform: rotate(-45deg);
+}
+.brands {
+	margin: 30px 0;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	flex-wrap: wrap;
+}
+.brands img {
+	max-width: 150px;
+	max-height: 100px;
+	padding: 30px;
+}
 
 /* Footer */
 
@@ -495,7 +524,7 @@ footer div h2 {
 	font-weight: 400;
 	font-size: 14px;
 	text-align: left;
-	color: #818181;
+	color: var(--color3);
 }
 .ontop {
 	position: fixed;
@@ -509,6 +538,43 @@ footer div h2 {
 	cursor: pointer;
 	z-index: 9999;
 	visibility: hidden;
+}
+.faqContainer {
+    padding: 20px 0 0 0;
+    margin-bottom: -20px;
+}
+.faqItem {
+    background-color: #f5f5f5;
+    margin: 20px 0;
+    padding: 20px;
+    cursor: pointer;
+}
+.faqQuestion {
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 30px;
+    color: var(--color3);
+}
+.faqAnswer {
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 30px;
+    color: #000;
+    display: none;
+    margin-top: 30px;
+    max-width: 1048px;
+}
+.faqItem.active .faqAnswer {
+    display: block;
+}
+.mb-post {
+    margin: 20px 0;
+}
+.mb-post p, .mb-post p a {
+    padding: 0;
+}
+.mb-next {
+    padding-bottom: 0;
 }
 
 /* --- 900-1440 */
