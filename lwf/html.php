@@ -19,7 +19,9 @@ class html {
 				<link rel="icon" href="'.date::$WEB.'favicon.svg" type="image/svg+xml">
 				<meta charset="utf-8">
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
-				<meta name="description" content="'.date::$DESCRIPTION[$lang].'">';
+				<meta name="description" content="'.date::$DESCRIPTION[$lang].'">
+				<meta name="keywords" content="'.date::$KEYWORDS[$lang].'">
+				';
 		include 'open-graph.php';
 		if (date::$SOCIAL_NETWORK[$lang] == 'vk') {
             echo '
@@ -39,5 +41,6 @@ class html {
 		</html>
 		';
 	}
+
 
 }
