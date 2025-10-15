@@ -29,6 +29,10 @@ class date {
 		'LWF (Landing Web Framework): Lightweight PHP framework for creating fast, SEO-optimized landing pages. Minimalist design, easy customization, and perfect for developers building high-conversion marketing pages.',
 		'LWF (Landing Web Framework) - легкий PHP-фреймворк для создания быстрых, оптимизированных для SEO целевых страниц. Минималистичный дизайн, простая настройка и идеальное решение для разработчиков, создающих маркетинговые страницы с высокой конверсией.'
 	];
+	public static $KEYWORDS = [
+		'',
+		''
+	];
 	public static $OFFER = [
 		'<span class="color2">50% DISCOUNT</span> DESCRIPTION <br><span class="light">OF THE SPECIAL OFFER</span>',
 		'<span class="color2">СКИДКА 50%</span> ОПИСАНИЕ УСЛОВИЯ <br><span class="light">СПЕЦИАЛЬНОГО ПРЕДЛОЖЕНИЯ</span>'
@@ -451,3 +455,4 @@ HTML;
 	];
 
 }
+
