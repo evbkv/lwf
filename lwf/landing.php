@@ -345,7 +345,7 @@ class view {
         if (isset(date::$VK_WIDGET)) echo '<article class="wrapper" style="padding-top: 70px; display: flex; justify-content: center; align-items: center;">' . date::$VK_WIDGET . '</article>';
 	}
 
-	// Block - Comments
+	// Block - Reviews
 
     public static function comments($lang) {
         if (isset(date::$COMMENTS)) {
