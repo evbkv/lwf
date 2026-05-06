@@ -456,7 +456,7 @@ HTML;
 
 	// Comments
 	
-	public static $COMMENTS = [];
+	public static REVIEWS = [];
 
 }
 
