@@ -454,5 +454,9 @@ HTML;
 		]
 	];
 
+	// Comments
+	
+	public static $COMMENTS = [];
+
 }
 
