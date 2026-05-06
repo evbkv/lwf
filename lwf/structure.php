@@ -30,7 +30,7 @@ foreach ($arr as $section) {
 
 // Footer
 
-view::comments($lang);
+view::reviews($lang);
 view::yandexReviews();
 view::faq($lang);
 view::mb();
