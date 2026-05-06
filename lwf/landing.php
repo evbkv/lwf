@@ -347,14 +347,14 @@ class view {
 
 	// Block - Reviews
 
-    public static function comments($lang) {
-        if (isset(date::$COMMENTS)) {
-            echo '<div class="wrapper"><div class="firstText"><h2>'.date::$COMMENTS[0][$lang].'</h2></div></div>';
+    public static function reviews($lang) {
+        if (isset(date::$REVIEWS)) {
+            echo '<div class="wrapper"><div class="firstText"><h2>'.date::$REVIEWS[0][$lang].'</h2></div></div>';
             
-            $commentsData = date::$COMMENTS[1];
-            shuffle($commentsData);
+            $reviewsData = date::$REVIEWS[1];
+            shuffle($reviewsData);
             $jsItems = [];
-            foreach ($commentsData as $item) {
+            foreach ($creviewsData as $item) {
                 $name = json_encode($item[0][0], JSON_UNESCAPED_UNICODE);
                 $text = json_encode($item[1][0], JSON_UNESCAPED_UNICODE);
                 $date = json_encode($item[2][0], JSON_UNESCAPED_UNICODE);
