@@ -344,6 +344,412 @@ class view {
 	public static function vkWidget() {
         if (isset(date::$VK_WIDGET)) echo '<article class="wrapper" style="padding-top: 70px; display: flex; justify-content: center; align-items: center;">' . date::$VK_WIDGET . '</article>';
 	}
+
+	// Block - Comments
+
+    public static function comments($lang) {
+        if (isset(date::$COMMENTS)) {
+            echo '<div class="wrapper"><div class="firstText"><h2>'.date::$COMMENTS[0][$lang].'</h2></div></div>';
+            
+            $commentsData = date::$COMMENTS[1];
+            shuffle($commentsData);
+            $jsItems = [];
+            foreach ($commentsData as $item) {
+                $name = json_encode($item[0][0], JSON_UNESCAPED_UNICODE);
+                $text = json_encode($item[1][0], JSON_UNESCAPED_UNICODE);
+                $date = json_encode($item[2][0], JSON_UNESCAPED_UNICODE);
+                $jsItems[] = "{ name: $name, text: $text, date: $date }";
+            }
+            $testimonialsJs = implode(",\n        ", $jsItems);
+            
+            echo <<<'EOF'
+
+<div class="testimonial-section">
+    <div class="marquee-viewport" id="marqueeViewport">
+        <div class="marquee-track" id="marqueeTrack">
+        </div>
+    </div>
+</div>
+
+<script>
+    const testimonialsData = [
+EOF;
+            echo "\n        $testimonialsJs\n    ];\n";
+            echo <<<'EOF'
+
+    let track = document.getElementById('marqueeTrack');
+    let viewport = document.getElementById('marqueeViewport');
+    let animationId = null;
+    let isPaused = false;
+    let translateX = 0;
+    let setWidth = 0;
+    let speed = 50;
+    let lastTimestamp = 0;
+    let isAnimating = false;
+    let resizeObserver = null;
+    let dragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let dragStartTranslate = 0;
+    let dragDirectionLocked = false;
+    let dragIsHorizontal = false;
+
+    function createCard(item) {
+        const card = document.createElement('div');
+        card.className = 'testimonial-card';
+        
+        const nameDiv = document.createElement('div');
+        nameDiv.className = 'testimonial-name';
+        nameDiv.innerText = item.name;
+        
+        const textDiv = document.createElement('div');
+        textDiv.className = 'testimonial-text';
+        textDiv.innerText = item.text;
+        
+        const dateDiv = document.createElement('div');
+        dateDiv.className = 'testimonial-date';
+        dateDiv.innerText = item.date;
+        
+        card.appendChild(nameDiv);
+        card.appendChild(textDiv);
+        card.appendChild(dateDiv);
+        
+        return card;
+    }
+
+    function buildTrack() {
+        if (!track) return;
+        track.innerHTML = '';
+        
+        for (let i = 0; i < testimonialsData.length; i++) {
+            const card = createCard(testimonialsData[i]);
+            track.appendChild(card);
+        }
+        
+        for (let i = 0; i < testimonialsData.length; i++) {
+            const cardCopy = createCard(testimonialsData[i]);
+            track.appendChild(cardCopy);
+        }
+    }
+
+    function calculateSetWidth() {
+        if (!track) return 0;
+        const cards = track.querySelectorAll('.testimonial-card');
+        const originalCount = testimonialsData.length;
+        
+        if (cards.length < originalCount * 2) return 0;
+        
+        let widthSum = 0;
+        for (let i = 0; i < originalCount; i++) {
+            const card = cards[i];
+            if (card) {
+                const rect = card.getBoundingClientRect();
+                widthSum += rect.width;
+            }
+        }
+        
+        const trackStyle = getComputedStyle(track);
+        const gapValue = parseFloat(trackStyle.gap) || 20;
+        const gapsTotal = (originalCount - 1) * gapValue;
+        
+        return widthSum + gapsTotal;
+    }
+
+    function applyTranslate() {
+        if (!track) return;
+        track.style.transform = `translateX(${translateX}px)`;
+    }
+
+    function normalizeTranslate() {
+        if (setWidth <= 0) return;
+        if (translateX <= -setWidth) {
+            translateX += setWidth;
+        } else if (translateX > 0) {
+            translateX -= setWidth;
+        }
+        if (translateX < -setWidth) translateX += setWidth;
+        if (translateX > 0) translateX -= setWidth;
+        applyTranslate();
+    }
+
+    function step(timestamp) {
+        if (!isAnimating) return;
+        
+        if (!isPaused && !dragging && setWidth > 0) {
+            if (lastTimestamp === 0) {
+                lastTimestamp = timestamp;
+                requestAnimationFrame(step);
+                return;
+            }
+            
+            const delta = Math.min(0.05, (timestamp - lastTimestamp) / 1000);
+            if (delta > 0 && delta < 0.2) {
+                let move = speed * delta;
+                translateX -= move;
+                
+                if (translateX <= -setWidth) {
+                    translateX += setWidth;
+                    while (translateX <= -setWidth && setWidth > 0) {
+                        translateX += setWidth;
+                    }
+                } 
+                if (translateX > 0 && setWidth > 0) {
+                    translateX -= setWidth;
+                }
+                
+                applyTranslate();
+            }
+            lastTimestamp = timestamp;
+        } else {
+            if (!isPaused && !dragging) {
+            } else {
+                lastTimestamp = 0;
+            }
+        }
+        
+        animationId = requestAnimationFrame(step);
+    }
+
+    function startScrollAnimation() {
+        if (animationId) {
+            cancelAnimationFrame(animationId);
+            animationId = null;
+        }
+        isAnimating = true;
+        lastTimestamp = 0;
+        animationId = requestAnimationFrame(step);
+    }
+
+    function stopScrollAnimation() {
+        if (animationId) {
+            cancelAnimationFrame(animationId);
+            animationId = null;
+        }
+        isAnimating = false;
+    }
+
+    function pauseScroll() {
+        if (isPaused) return;
+        isPaused = true;
+        viewport.classList.add('paused');
+        lastTimestamp = 0;
+    }
+
+    function resumeScroll() {
+        if (!isPaused) return;
+        isPaused = false;
+        viewport.classList.remove('paused');
+        lastTimestamp = 0;
+        if (!isAnimating) {
+            startScrollAnimation();
+        }
+    }
+    
+    function recalcAndFix() {
+        if (!track) return;
+        const newSetWidth = calculateSetWidth();
+        if (newSetWidth > 0 && Math.abs(newSetWidth - setWidth) > 1) {
+            const oldSetWidth = setWidth;
+            setWidth = newSetWidth;
+            
+            if (oldSetWidth > 0 && setWidth > 0) {
+                let ratio = Math.abs(translateX) / oldSetWidth;
+                let newTranslate = -(ratio * setWidth);
+                if (newTranslate > 0) newTranslate = -setWidth + (newTranslate % setWidth);
+                if (newTranslate < -setWidth) newTranslate += setWidth;
+                translateX = newTranslate;
+                applyTranslate();
+                normalizeTranslate();
+            } else {
+                translateX = 0;
+                applyTranslate();
+            }
+        } else if (newSetWidth > 0 && setWidth === 0) {
+            setWidth = newSetWidth;
+            translateX = 0;
+            applyTranslate();
+        } else if (newSetWidth !== setWidth && newSetWidth > 0) {
+            setWidth = newSetWidth;
+            normalizeTranslate();
+        }
+        
+        if (setWidth > 0) {
+            if (translateX <= -setWidth) translateX += setWidth;
+            if (translateX > 0) translateX -= setWidth;
+            applyTranslate();
+        }
+    }
+
+    function onDragStart(clientX, clientY) {
+        if (!setWidth) return;
+        dragging = true;
+        dragStartX = clientX;
+        dragStartY = clientY;
+        dragStartTranslate = translateX;
+        dragDirectionLocked = false;
+        dragIsHorizontal = false;
+        track.style.cursor = 'grabbing';
+        viewport.style.cursor = 'grabbing';
+        pauseScroll();
+    }
+
+    function onDragMove(clientX, clientY) {
+        if (!dragging) return;
+        
+        if (!dragDirectionLocked) {
+            let deltaX = Math.abs(clientX - dragStartX);
+            let deltaY = Math.abs(clientY - dragStartY);
+            if (deltaX > 5 || deltaY > 5) {
+                dragDirectionLocked = true;
+                dragIsHorizontal = deltaX > deltaY;
+                if (dragIsHorizontal) {
+                    viewport.style.touchAction = 'none';
+                } else {
+                    onDragEnd();
+                    return;
+                }
+            } else {
+                return;
+            }
+        }
+        
+        if (dragIsHorizontal) {
+            let delta = clientX - dragStartX;
+            let newTranslate = dragStartTranslate + delta;
+            translateX = newTranslate;
+            normalizeTranslate();
+            applyTranslate();
+        }
+    }
+
+    function onDragEnd() {
+        if (!dragging) return;
+        dragging = false;
+        dragDirectionLocked = false;
+        dragIsHorizontal = false;
+        track.style.cursor = '';
+        viewport.style.cursor = '';
+        viewport.style.touchAction = '';
+        resumeScroll();
+        lastTimestamp = 0;
+    }
+
+    function initDrag() {
+        let isDraggingNow = false;
+        
+        const onMouseDown = (e) => {
+            if (e.button !== 0) return;
+            e.preventDefault();
+            onDragStart(e.clientX, e.clientY);
+            isDraggingNow = true;
+        };
+        
+        const onMouseMove = (e) => {
+            if (isDraggingNow && dragging) {
+                e.preventDefault();
+                onDragMove(e.clientX, e.clientY);
+            }
+        };
+        
+        const onMouseUp = () => {
+            if (isDraggingNow) {
+                isDraggingNow = false;
+                onDragEnd();
+            }
+        };
+        
+        const onTouchStart = (e) => {
+            if (e.touches.length) {
+                onDragStart(e.touches[0].clientX, e.touches[0].clientY);
+                isDraggingNow = true;
+            }
+        };
+        
+        const onTouchMove = (e) => {
+            if (isDraggingNow && dragging && e.touches.length) {
+                onDragMove(e.touches[0].clientX, e.touches[0].clientY);
+                if (dragIsHorizontal) {
+                    e.preventDefault();
+                }
+            }
+        };
+        
+        const onTouchEnd = (e) => {
+            if (isDraggingNow) {
+                isDraggingNow = false;
+                onDragEnd();
+            }
+        };
+        
+        viewport.addEventListener('mousedown', onMouseDown);
+        window.addEventListener('mousemove', onMouseMove);
+        window.addEventListener('mouseup', onMouseUp);
+        viewport.addEventListener('touchstart', onTouchStart, { passive: false });
+        window.addEventListener('touchmove', onTouchMove, { passive: false });
+        window.addEventListener('touchend', onTouchEnd);
+        window.addEventListener('touchcancel', onTouchEnd);
+    }
+
+    function initPauseOnHoverAndTouch() {
+        if (!viewport) return;
+        
+        viewport.addEventListener('mouseenter', () => { if (!dragging) pauseScroll(); });
+        viewport.addEventListener('mouseleave', () => { if (!dragging) resumeScroll(); });
+    }
+
+    function initResizeObserver() {
+        if (window.ResizeObserver) {
+            resizeObserver = new ResizeObserver(() => {
+                setTimeout(() => { if (track && track.children.length) recalcAndFix(); }, 30);
+            });
+            if (viewport) resizeObserver.observe(viewport);
+            if (track) resizeObserver.observe(track);
+        }
+        window.addEventListener('resize', () => {
+            setTimeout(() => { if (track && track.children.length) recalcAndFix(); }, 60);
+        });
+    }
+
+    function initInfiniteCarousel() {
+        buildTrack();
+        setTimeout(() => {
+            const newWidth = calculateSetWidth();
+            if (newWidth > 0) {
+                setWidth = newWidth;
+                translateX = 0;
+                applyTranslate();
+            } else {
+                setTimeout(() => {
+                    const w = calculateSetWidth();
+                    if (w > 0) setWidth = w;
+                    translateX = 0;
+                    applyTranslate();
+                }, 80);
+            }
+            if (isAnimating) stopScrollAnimation();
+            startScrollAnimation();
+            initDrag();
+        }, 20);
+    }
+
+    window.addEventListener('load', () => {
+        initInfiniteCarousel();
+        initPauseOnHoverAndTouch();
+        initResizeObserver();
+    });
+    
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden && !isPaused && !dragging && isAnimating) lastTimestamp = 0;
+    });
+    
+    window.addEventListener('beforeunload', () => {
+        if (animationId) cancelAnimationFrame(animationId);
+    });
+</script>
+EOF;
+            echo '<div style="text-align: center; padding-bottom: 40px;"><a href="https://yandex.ru/profile/116527983929" target="_blank"><img src="./img/yandex-reviews.jpg" width="100px"></a></div>';
+        }
+    }
 	
 	// Footer
 
