@@ -454,7 +454,7 @@ HTML;
 		]
 	];
 
-	// Comments
+	// Revews
 	
 	public static REVIEWS = [];
 
